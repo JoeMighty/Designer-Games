@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrast Checker - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .color-preview {
+            border-radius: var(--border-radius-md);
+            padding: 50px 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .preview-heading {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .preview-body {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 400px;
+            opacity: 0.9;
+        }
+
+        .preview-small {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .contrast-choice {
+            padding: 20px 15px;
+            border: 2px solid rgba(74, 74, 74, 0.15);
+            border-radius: var(--border-radius-md);
+            background: var(--off-white);
+            font-family: var(--font-family);
+            cursor: pointer;
+            transition: var(--transition-base);
+            text-align: center;
+        }
+
+        .contrast-choice:hover:not(:disabled) {
+            border-color: var(--sunset-orange);
+            background: var(--soft-peach);
+        }
+
+        .contrast-choice.selected-correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .contrast-choice.selected-wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .contrast-choice.reveal-correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .contrast-choice:disabled {
+            cursor: not-allowed;
+        }
+
+        .choice-level {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            display: block;
+        }
+
+        .choice-desc {
+            font-size: 0.8rem;
+            color: var(--warm-gray);
+            margin-top: 4px;
+        }
+
+        .ratio-reveal {
+            text-align: center;
+            padding: 15px;
+            border-radius: var(--border-radius-md);
+            background: var(--light-sand);
+            font-size: 1rem;
+            color: var(--charcoal);
+            min-height: 50px;
+        }
+
+        .ratio-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--sunset-orange);
+        }
+
+        .round-info {
+            text-align: center;
+            color: var(--warm-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .choices-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px;">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <header>
+            <h1>Contrast Checker</h1>
+            <p>Identify the WCAG accessibility level of each color combination</p>
+        </header>
+
+        <div class="game-area">
+            <div class="round-info" id="roundInfo">Round 1 of 10</div>
+
+            <div class="color-preview" id="colorPreview">
+                <div class="preview-heading" id="previewHeading">Sample Heading</div>
+                <div class="preview-body" id="previewBody">This is body text. Readable text is crucial for accessible design.</div>
+                <div class="preview-small" id="previewSmall">Small print text (14px equivalent)</div>
+            </div>
+
+            <div class="choices-grid" id="choicesGrid">
+                <button class="contrast-choice" data-level="aaa">
+                    <span class="choice-level">AAA Pass</span>
+                    <div class="choice-desc">Ratio ≥ 7:1 (Enhanced)</div>
+                </button>
+                <button class="contrast-choice" data-level="aa">
+                    <span class="choice-level">AA Pass</span>
+                    <div class="choice-desc">Ratio ≥ 4.5:1 (Normal text)</div>
+                </button>
+                <button class="contrast-choice" data-level="aa-large">
+                    <span class="choice-level">AA Large Only</span>
+                    <div class="choice-desc">Ratio 3:1–4.5:1 (Large text)</div>
+                </button>
+                <button class="contrast-choice" data-level="fail">
+                    <span class="choice-level">Fail</span>
+                    <div class="choice-desc">Ratio &lt; 3:1 (Inaccessible)</div>
+                </button>
+            </div>
+
+            <div class="ratio-reveal" id="ratioReveal">
+                Make your selection to see the contrast ratio
+            </div>
+
+            <div class="button-group">
+                <button class="button" id="nextButton" style="display:none;">Next Pair →</button>
+            </div>
+        </div>
+
+        <div class="score-area">
+            <div class="score-header">
+                <h2>Session Score</h2>
+                <button class="reset-button" id="resetScore">Reset</button>
+            </div>
+            <div class="score-display" id="scoreDisplay">0</div>
+        </div>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/scoring.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/contrast-check.js"></script>
+</body>
+</html>

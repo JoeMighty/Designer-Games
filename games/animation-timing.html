@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Timing - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .animation-stage {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .anim-track {
+            position: relative;
+            height: 80px;
+            background: var(--light-sand);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            border: 2px solid rgba(74, 74, 74, 0.1);
+        }
+
+        .track-label {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--warm-gray);
+            z-index: 1;
+        }
+
+        .anim-ball {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            left: 40px;
+        }
+
+        .target-ball {
+            width: 40px;
+            height: 40px;
+            background: var(--sunset-orange);
+        }
+
+        .user-ball {
+            width: 40px;
+            height: 40px;
+            background: var(--charcoal);
+        }
+
+        .easing-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .easing-btn {
+            padding: 12px 10px;
+            border: 2px solid rgba(74, 74, 74, 0.15);
+            border-radius: var(--border-radius-md);
+            background: var(--off-white);
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: var(--transition-base);
+            text-align: center;
+        }
+
+        .easing-btn.active {
+            background: var(--sunset-orange);
+            color: white;
+            border-color: var(--sunset-orange);
+        }
+
+        .easing-btn:hover:not(.active) {
+            border-color: var(--sunset-orange);
+            color: var(--sunset-orange);
+        }
+
+        .duration-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 70px;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .duration-label {
+            font-weight: 600;
+            color: var(--warm-gray);
+            font-size: 0.9rem;
+        }
+
+        .duration-value {
+            font-weight: 700;
+            color: var(--charcoal);
+            font-size: 0.95rem;
+        }
+
+        .curve-display {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .curve-card {
+            background: var(--light-sand);
+            border-radius: var(--border-radius-md);
+            padding: 12px 16px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .curve-name {
+            font-weight: 700;
+            color: var(--charcoal);
+            display: block;
+        }
+
+        .curve-value {
+            color: var(--warm-gray);
+            font-size: 0.75rem;
+        }
+
+        .round-info {
+            text-align: center;
+            color: var(--warm-gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .easing-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px;">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <header>
+            <h1>Animation Timing</h1>
+            <p>Match the easing curve and duration of the target animation</p>
+        </header>
+
+        <div class="game-area">
+            <div class="round-info" id="roundInfo">Round 1 of 8</div>
+
+            <div class="animation-stage">
+                <div class="anim-track" id="targetTrack">
+                    <span class="track-label">Target</span>
+                    <div class="anim-ball target-ball" id="targetBall"></div>
+                </div>
+                <div class="anim-track" id="userTrack">
+                    <span class="track-label">Yours</span>
+                    <div class="anim-ball user-ball" id="userBall"></div>
+                </div>
+            </div>
+
+            <div class="button-group" style="margin:15px 0 5px;">
+                <button class="button secondary" id="playButton">▶ Play Both</button>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <p style="font-weight:600; color:var(--charcoal); margin-bottom:10px;">Select Easing:</p>
+                <div class="easing-selector" id="easingSelector">
+                    <button class="easing-btn active" data-easing="linear">Linear</button>
+                    <button class="easing-btn" data-easing="ease">Ease</button>
+                    <button class="easing-btn" data-easing="ease-in">Ease In</button>
+                    <button class="easing-btn" data-easing="ease-out">Ease Out</button>
+                    <button class="easing-btn" data-easing="ease-in-out">Ease In-Out</button>
+                    <button class="easing-btn" data-easing="cubic-bezier(0.68,-0.55,0.27,1.55)">Bounce</button>
+                </div>
+            </div>
+
+            <div class="duration-row">
+                <span class="duration-label">Duration:</span>
+                <input type="range" id="durationSlider" min="200" max="3000" value="1000" step="100">
+                <span class="duration-value"><span id="durationVal">1.0</span>s</span>
+            </div>
+
+            <div class="button-group">
+                <button class="button" id="checkButton">Submit Answer</button>
+                <button class="button" id="nextButton" style="display:none;">Next Round →</button>
+            </div>
+
+            <div id="result" style="margin-top:15px;"></div>
+        </div>
+
+        <div class="score-area">
+            <div class="score-header">
+                <h2>Session Score</h2>
+                <button class="reset-button" id="resetScore">Reset</button>
+            </div>
+            <div class="score-display" id="scoreDisplay">0</div>
+        </div>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/scoring.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/animation-timing.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art Lab - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: flex-end;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .control-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--warm-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .control-group select {
+            padding: 10px 12px;
+            border: 2px solid rgba(74, 74, 74, 0.15);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            background: var(--off-white);
+            color: var(--charcoal);
+            cursor: pointer;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(74, 74, 74, 0.25);
+            border-radius: var(--border-radius-md);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: var(--transition-base);
+            background: var(--light-sand);
+        }
+
+        .upload-area:hover {
+            border-color: var(--sunset-orange);
+            background: var(--soft-peach);
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            font-weight: 600;
+            color: var(--warm-gray);
+            font-size: 1rem;
+        }
+
+        .upload-sub {
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .ascii-output {
+            font-family: 'Courier New', monospace;
+            font-size: 6px;
+            line-height: 1.1;
+            white-space: pre;
+            background: #1A1A1A;
+            color: #FFD4B8;
+            padding: 15px;
+            border-radius: var(--border-radius-md);
+            overflow: auto;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-height: 500px;
+        }
+
+        .ascii-placeholder {
+            color: rgba(255, 212, 184, 0.4);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .presets-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .preset-btn {
+            padding: 8px 16px;
+            background: var(--off-white);
+            border: 2px solid rgba(74, 74, 74, 0.15);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .preset-btn:hover {
+            border-color: var(--sunset-orange);
+            color: var(--sunset-orange);
+        }
+
+        .hidden-canvas {
+            display: none;
+        }
+
+        .density-value {
+            font-weight: 700;
+            color: var(--charcoal);
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px;">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <header>
+            <h1>ASCII Art Lab</h1>
+            <p>Transform any image into ASCII art</p>
+        </header>
+
+        <div class="game-area">
+            <div class="upload-area" id="uploadArea">
+                <label for="imageInput">
+                    <div class="upload-label">📁 Click to upload an image</div>
+                    <div class="upload-sub">PNG, JPG, GIF · or use a preset below</div>
+                </label>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+
+            <div>
+                <label style="font-size:0.85rem; font-weight:600; color:var(--warm-gray); text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:8px;">Presets</label>
+                <div class="presets-row" id="presetsRow">
+                    <button class="preset-btn" data-preset="circle">Circle</button>
+                    <button class="preset-btn" data-preset="star">Star</button>
+                    <button class="preset-btn" data-preset="heart">Heart</button>
+                    <button class="preset-btn" data-preset="wave">Wave</button>
+                    <button class="preset-btn" data-preset="grid">Grid</button>
+                </div>
+            </div>
+
+            <div class="controls-row">
+                <div class="control-group">
+                    <label>Character Set</label>
+                    <select id="charSetSelect">
+                        <option value="standard">Standard (darkness)</option>
+                        <option value="blocks">Block characters</option>
+                        <option value="minimal">Minimal</option>
+                        <option value="detailed">Detailed</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Width: <span class="density-value" id="widthValue">80</span> cols</label>
+                    <input type="range" id="widthSlider" min="20" max="160" value="80" step="5">
+                </div>
+                <div class="control-group">
+                    <label>Contrast</label>
+                    <select id="contrastSelect">
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                        <option value="inverted">Inverted</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="ascii-output" id="asciiOutput">
+                <div class="ascii-placeholder">Upload an image or select a preset to get started</div>
+            </div>
+
+            <div class="button-group">
+                <button class="button secondary" id="copyButton" disabled>Copy Text</button>
+                <button class="button" id="downloadButton" disabled>Download .txt</button>
+            </div>
+        </div>
+
+        <canvas id="hiddenCanvas" class="hidden-canvas"></canvas>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/ascii-art.js"></script>
+</body>
+</html>

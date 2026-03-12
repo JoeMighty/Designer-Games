@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kerning Game - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&family=Bebas+Neue&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .word-display {
+            text-align: center;
+            margin: 60px 0;
+            font-size: 5rem;
+            font-weight: 700;
+            letter-spacing: var(--letter-spacing, 0px);
+            user-select: none;
+        }
+
+        .controls {
+            margin: 40px 0;
+        }
+
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--warm-gray);
+            font-weight: 600;
+        }
+
+        .value-display {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            color: var(--charcoal);
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: var(--border-radius-md);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .result.close {
+            background: var(--soft-peach);
+            color: var(--deep-terracotta);
+        }
+
+        .result.far {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .word-display {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+        
+        <header>
+            <h1>Kerning Game</h1>
+            <p>Adjust the letter spacing to match the ideal kerning</p>
+        </header>
+
+        <div class="game-area">
+            <div class="word-display" id="wordDisplay">WAVE</div>
+
+            <div class="controls">
+                <div class="slider-container">
+                    <label for="kerningSlider">Adjust Kerning</label>
+                    <input type="range" id="kerningSlider" min="-50" max="50" value="0" step="1">
+                    <div class="value-display" id="valueDisplay">0px</div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="button" id="checkButton">Check Answer</button>
+                <button class="button" id="nextButton" style="display: none;">Next Word</button>
+            </div>
+
+            <div id="result"></div>
+        </div>
+
+        <div class="score-area">
+            <div class="score-header">
+                <h2>Session Score</h2>
+                <button class="reset-button" id="resetScore">Reset</button>
+            </div>
+            <div class="score-display" id="scoreDisplay">0</div>
+        </div>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/scoring.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/kerning.js"></script>
+</body>
+</html>

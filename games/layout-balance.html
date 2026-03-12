@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Balance - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .balance-stage {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            height: 360px;
+            margin: 0 auto;
+            background: var(--off-white);
+            border: 2px solid rgba(74, 74, 74, 0.12);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .center-cross {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .center-cross::before, .center-cross::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 107, 53, 0.2);
+        }
+
+        .center-cross::before {
+            width: 1px;
+            height: 100%;
+            top: 0;
+            left: 50%;
+        }
+
+        .center-cross::after {
+            height: 1px;
+            width: 100%;
+            top: 50%;
+            left: 0;
+        }
+
+        .balance-element {
+            position: absolute;
+            border-radius: 6px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: box-shadow 0.15s;
+        }
+
+        .balance-element:active { cursor: grabbing; }
+
+        .balance-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #e74c3c, #2ecc71);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .balance-needle {
+            position: absolute;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--charcoal);
+            transform: translateX(-50%);
+            transition: left 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .balance-score-display {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+        }
+
+        .balance-pct {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--sunset-orange);
+        }
+
+        .instructions-text {
+            background: var(--light-sand);
+            border-radius: var(--border-radius-md);
+            padding: 14px 18px;
+            font-size: 0.9rem;
+            color: var(--warm-gray);
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px;">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <header>
+            <h1>Layout Balance</h1>
+            <p>Arrange elements so the layout feels visually balanced</p>
+        </header>
+
+        <div class="game-area">
+            <div class="instructions-text">
+                <strong>Goal:</strong> Drag the elements so the visual center of mass is as close to the stage center as possible.
+                Larger / heavier elements have more weight. The needle shows the current balance.
+            </div>
+
+            <div class="balance-stage" id="balanceStage">
+                <div class="center-cross" style="width:560px; height:360px;"></div>
+                <div class="balance-indicator">
+                    <div class="balance-needle" id="balanceNeedle"></div>
+                </div>
+            </div>
+
+            <div class="balance-score-display">
+                Balance: <span class="balance-pct" id="balancePct">--</span> from center
+            </div>
+
+            <div class="button-group">
+                <button class="button" id="checkButton">Check Balance</button>
+                <button class="button" id="nextButton" style="display:none;">New Layout →</button>
+            </div>
+
+            <div id="result" style="margin-top:15px;"></div>
+        </div>
+
+        <div class="score-area">
+            <div class="score-header">
+                <h2>Session Score</h2>
+                <button class="reset-button" id="resetScore">Reset</button>
+            </div>
+            <div class="score-display" id="scoreDisplay">0</div>
+        </div>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/scoring.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/layout-balance.js"></script>
+</body>
+</html>

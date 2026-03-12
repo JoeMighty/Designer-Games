@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Identifier - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&family=Bebas+Neue&family=Merriweather:wght@700&family=Oswald:wght@700&family=Lora:wght@700&family=Raleway:wght@700&family=Josefin+Sans:wght@700&family=Nunito:wght@700&family=Crimson+Text:wght@700&family=Abril+Fatface&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .sample-display {
+            text-align: center;
+            padding: 50px 20px;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: var(--charcoal);
+            line-height: 1.2;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-sand);
+            border-radius: var(--border-radius-md);
+            margin-bottom: 30px;
+            user-select: none;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .choice-btn {
+            padding: 18px 20px;
+            background: var(--off-white);
+            border: 2px solid rgba(74, 74, 74, 0.15);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: var(--transition-base);
+            text-align: left;
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            border-color: var(--sunset-orange);
+            background: var(--soft-peach);
+        }
+
+        .choice-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .choice-btn.wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .choice-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .round-info {
+            text-align: center;
+            color: var(--warm-gray);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .hint {
+            text-align: center;
+            color: var(--warm-gray);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            min-height: 24px;
+        }
+
+        @media (max-width: 480px) {
+            .choices-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px;">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <header>
+            <h1>Font Identifier</h1>
+            <p>Can you identify the typeface from the sample?</p>
+        </header>
+
+        <div class="game-area">
+            <div class="round-info" id="roundInfo">Round 1 of 10</div>
+            <div class="sample-display" id="sampleDisplay">Loading...</div>
+            <div class="choices-grid" id="choicesGrid"></div>
+            <div class="hint" id="hint"></div>
+            <div class="button-group">
+                <button class="button" id="nextButton" style="display:none;">Next Round →</button>
+            </div>
+        </div>
+
+        <div class="score-area">
+            <div class="score-header">
+                <h2>Session Score</h2>
+                <button class="reset-button" id="resetScore">Reset</button>
+            </div>
+            <div class="score-display" id="scoreDisplay">0</div>
+        </div>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/scoring.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/font-id.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Ratio - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .ratio-stage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 280px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .rect-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .ratio-rect {
+            background: var(--sunset-orange);
+            opacity: 0.85;
+            border-radius: 4px;
+            transition: width 0.05s;
+            min-width: 40px;
+            min-height: 60px;
+        }
+
+        .resize-handle {
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 40px;
+            background: var(--charcoal);
+            border-radius: 4px;
+            cursor: ew-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resize-handle::before {
+            content: '⋮';
+            color: white;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .dimensions-display {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1rem;
+            color: var(--warm-gray);
+        }
+
+        .ratio-display {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--charcoal);
+        }
+
+        .challenge-info {
+            background: var(--light-sand);
+            border-radius: var(--border-radius-md);
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .challenge-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--charcoal);
+            margin-bottom: 8px;
+        }
+
+        .challenge-target {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--sunset-orange);
+        }
+
+        .challenge-desc {
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+            margin-top: 5px;
+        }
+
+        .phi-guide {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .phi-fact {
+            background: var(--off-white);
+            border-radius: var(--border-radius-md);
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+            border: 1px solid rgba(74,74,74,0.1);
+        }
+
+        .phi-fact strong {
+            color: var(--sunset-orange);
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px;">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <header>
+            <h1>Golden Ratio</h1>
+            <p>Resize the rectangle to match the target proportion</p>
+        </header>
+
+        <div class="game-area">
+            <div class="challenge-info">
+                <div class="challenge-title">Target Ratio</div>
+                <div class="challenge-target" id="challengeTarget">1 : 1.618</div>
+                <div class="challenge-desc" id="challengeDesc">The Golden Ratio (φ ≈ 1.618) — drag the handle to resize the width</div>
+            </div>
+
+            <div class="ratio-stage" id="ratioStage">
+                <div class="rect-container" id="rectContainer">
+                    <div class="ratio-rect" id="ratioRect"></div>
+                    <div class="resize-handle" id="resizeHandle"></div>
+                </div>
+            </div>
+
+            <div class="dimensions-display">
+                <span id="widthDisplay">200</span>px × <span id="heightDisplay">180</span>px &nbsp;|&nbsp;
+                Ratio: <span class="ratio-display" id="ratioDisplay">1 : 1.11</span>
+            </div>
+
+            <div class="phi-guide">
+                <div class="phi-fact">φ = <strong>1.618...</strong></div>
+                <div class="phi-fact">Fibonacci: <strong>8, 13, 21, 34, 55...</strong></div>
+                <div class="phi-fact">Width ÷ Height = <strong>φ</strong></div>
+            </div>
+
+            <div class="button-group">
+                <button class="button" id="checkButton">Check Ratio</button>
+                <button class="button" id="nextButton" style="display:none;">Next Challenge →</button>
+            </div>
+
+            <div id="result" style="margin-top: 20px;"></div>
+        </div>
+
+        <div class="score-area">
+            <div class="score-header">
+                <h2>Session Score</h2>
+                <button class="reset-button" id="resetScore">Reset</button>
+            </div>
+            <div class="score-display" id="scoreDisplay">0</div>
+        </div>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/scoring.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/golden-ratio.js"></script>
+</body>
+</html>

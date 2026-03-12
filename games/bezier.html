@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bezier Curves - DesignerGames</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/game.css">
+    <style>
+        .canvas-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        #bezierCanvas {
+            border: 2px solid rgba(74, 74, 74, 0.15);
+            border-radius: var(--border-radius-md);
+            display: block;
+            max-width: 100%;
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        .status-bar {
+            background: var(--light-sand);
+            border-radius: var(--border-radius-md);
+            padding: 12px 20px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 46px;
+        }
+
+        .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--sunset-orange);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--warm-gray);
+        }
+
+        .step-pills {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .step-pill {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(74, 74, 74, 0.08);
+            color: var(--warm-gray);
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .step-pill.active {
+            background: var(--sunset-orange);
+            color: white;
+        }
+
+        .step-pill.complete {
+            background: var(--charcoal);
+            color: white;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 12px;
+            font-size: 0.82rem;
+            color: var(--warm-gray);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .legend-line {
+            width: 26px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .similarity-display {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            min-height: 26px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px;">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <header>
+            <h1>Bezier Curves</h1>
+            <p>Click and drag to place anchors with handles — just like Illustrator's pen tool</p>
+        </header>
+
+        <div class="game-area">
+            <div class="status-bar">
+                <div class="status-icon" id="statusIcon">1</div>
+                <span class="status-text" id="statusText">Click and drag to place the start anchor point</span>
+            </div>
+
+            <div class="step-pills">
+                <span class="step-pill active" id="pill0">① Start anchor</span>
+                <span class="step-pill" id="pill1">② End anchor</span>
+                <span class="step-pill" id="pill2">③ Fine-tune & check</span>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-line" style="background: var(--sunset-orange);"></div>
+                    Target curve
+                </div>
+                <div class="legend-item">
+                    <div class="legend-line" style="background: var(--charcoal);"></div>
+                    Your curve
+                </div>
+                <div class="legend-item">
+                    <svg width="22" height="14" style="flex-shrink:0"><rect x="7" y="4" width="8" height="8" fill="var(--charcoal)"/></svg>
+                    Anchor
+                </div>
+                <div class="legend-item">
+                    <svg width="22" height="14" style="flex-shrink:0"><circle cx="11" cy="7" r="5" fill="white" stroke="var(--sunset-orange)" stroke-width="2"/></svg>
+                    Handle
+                </div>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="bezierCanvas" width="600" height="320"></canvas>
+            </div>
+
+            <div class="button-group" style="margin-top: 16px;">
+                <button class="button secondary" id="resetButton">Reset</button>
+                <button class="button" id="checkButton" disabled>Check Curve</button>
+                <button class="button" id="nextButton" style="display:none;">Next Curve →</button>
+            </div>
+
+            <div class="similarity-display" id="similarityDisplay"></div>
+        </div>
+
+        <div class="score-area">
+            <div class="score-header">
+                <h2>Session Score</h2>
+                <button class="reset-button" id="resetScore">Reset</button>
+            </div>
+            <div class="score-display" id="scoreDisplay">0</div>
+        </div>
+    </div>
+
+    <script src="../js/shared/storage.js"></script>
+    <script src="../js/shared/scoring.js"></script>
+    <script src="../js/shared/ui.js"></script>
+    <script src="../js/games/bezier.js"></script>
+</body>
+</html>
